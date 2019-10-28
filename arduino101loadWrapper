@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+# 	Name: arduino101LoadWrapper
+#
+#	Version	Date	Comment
+#	-------	----	-------
+#	0.0.1	191027	Initial version fork of avrdudeWrapper
+#
+#	Created on: 191027
+#	Author: Jacob
+#
+#	Purpose:
+#	Reset arduino101 to upload mode by pushing the Serial port
+#	to 1200 Baud on linux/OSX machines
+#	Based on windows bat file by p1ne and Javanaut.
+#	https://github.com/p1ne/arduino-leonardo-uploader
+#	https://github.com/javanaut2018/avrdude_autoreset_wrapper
+#
+#	The required information is extracted out of the command line send by
+#	arduinocdt
+#
+#	Commandline example
+#
+#	/Users/MyUser/.arduinocdt/packages/Intel/tools/arduino101load/2.0.1/arduino101load -dfu=/Users/MyUser/.arduinocdt/packages/arduino/tools/dfu-util/0.9.0-arduino1 -bin=./Utils_lib_test.bin -port=/dev/cu.usbmodemFA1231 -v -ble_fw_str=ATP1BLE00R-1631C4439 -ble_fw_pos=169984 -rtos_fw_str= -rtos_fw_pos=0 -core=2.0.0
+#
+#
+#	Usage:
+#	1:	Place this script in:
+#			/Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/tools/arduino101load/[VERSION]/
+#	2:	Edit:
+#			/Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/hardware/arc32/[VERSION]/platform.txt
+#		Replace:
+#			tools.arduino101load.cmd.path={runtime.tools.arduino101load.path}/arduino101load
+#		With:
+#			tools.arduino101load.cmd.path={runtime.tools.arduino101load.path}/arduino101loadWrapper
+#
+#
+# Set DEBUG to non zero for additional output
+DEBUG=0
+
+ME=`basename "$0"`
+echo "$ME: starting script"
+
+# print all parameters when in debug mode
+if [ $DEBUG -ne 0 ]
+then
+	for arg in "$@"
+	do
+		echo $arg
+	done
+fi
+
+OS=`uname`
+
+# Make the program path that is: $0 - scriptname + arduino101load
+PROGPATH=${0%$ME}"arduino101load"
+
+# Get the options for the excution of the avrdude command
+OPTIONS=$*
+
+# Look for the option -d(fu) and -p(ort)
+for arg in "$@"
+do
+	# get the first 2 characters of the argument
+	OPT="${arg:0:2}"
+	case $OPT in
+		"-p")
+			# get the port
+			PORT=${arg#-port=}
+			;;
+    	*)
+    esac
+done
+
+# Create the commandline
+COMMAND=$PROGPATH" "$OPTIONS
+
+# print all parameters when in debug mode
+if [ $DEBUG -ne 0 ]
+then
+	echo "OS = $OS"
+	echo "Program path = $PROGPATH"
+	echo "Port = $PORT"
+	echo "Options = $OPTIONS"
+	echo "Command = $COMMAND"
+fi
+
+# reset port delay 
+echo "$ME: Reset Arduino"
+
+# Check if MacOS
+if [ $OS = "Darwin" ]
+then
+	stty -f "$PORT" 1200 cs8 -cstopb -parenb
+else
+	stty -F "$PORT" 1200 cs8 -cstopb -parenb
+fi
+echo "$ME: Wait to give the board time to reboot"
+sleep 2
+
+$COMMAND
+# eof
