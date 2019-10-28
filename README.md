@@ -1,4 +1,4 @@
-# arduincdt-scripts-for-arduino
+# arduincdt scripts for MacOS and Linux
 These scripts allow to reset the upload port for specific Arduino boards.
 
 First is avrdudeWrapper:
