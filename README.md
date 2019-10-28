@@ -1,6 +1,10 @@
 # Arduincdt bash scripts for MacOS and Linux
 These scripts will allow to reset the upload port for specific Arduino boards from Eclipse CDT with the Arduino Plugin.
 
+	1. avrdudeWrapper
+	2. arduino101loadWrapper
+	3. cluploadEdison_osx.sh (replacement for original)
+
 # 1st is avrdudeWrapper:
 This is derived from the windows batch file from: https://github.com/javanaut2018/avrdude_autoreset_wrapper
 It brings the port to 1200Baud to reset the Arduino and bring it in upload mode. Which is required for Arduinos based on the ATmega32u4 like the Leonardo.
@@ -52,3 +56,38 @@ Locate the .arduinocdt folder. This is normaly hidden in your user folder
 		With:
 		 tools.arduino101load.cmd.path={runtime.tools.arduino101load.path}/arduino101loadWrapper
 	3: (re)start eclipse.
+
+# 3rd is cluploadEdison_osx.sh:
+This script adds the possibility to download the program to Intel Edison boards using Wifi.
+
+Script is tested on:
+
+	Macos: HighSierra and Mojava.
+	Linux: 
+
+Installation instuctions.
+
+Locate the .arduinocdt folder. This is normaly hidden in your user folder
+
+	1.	Prepare the Edison:
+		Create the user and group "download" on the edison
+		Add the user download to the group download.
+		change the group of the /sketch directory to download
+		Change the mode of the /sketch directory to give group read write and execute privilege.
+		Create the ssh keypair for the download user
+		Move the private key to the Mac.
+		Add the public key to the authorized_keys of the download user
+	2.	Prepare the Mac
+		Make a node file with the hostname of the Intel Edison wifi.
+		i.e. for hostname is foo
+		  sudo mknode /dev/cu.foo c 3 2
+	3.	Make a backup of the original file in:
+		  /Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/tools/sketchUploader \ 
+		  /[VERSION]/clupload/cluploadEdison_osx.sh
+		to:
+		  /Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/tools/sketchUploader \
+		  /[VERSION]/clupload/cluploadEdison_osx.sh.org
+	4.	Copy this file to:
+		  /Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/tools/sketchUploader \
+		  /[VERSION]/clupload/cluploadEdison_osx.sh
+	5.	(re)start Eclipse
