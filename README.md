@@ -2,7 +2,6 @@
 These scripts will allow to reset the upload port for specific Arduino boards from Eclipse CDT with the Arduino Plugin.
 
 # 1st is avrdudeWrapper:
-
 This is derived from the windows batch file from: https://github.com/javanaut2018/avrdude_autoreset_wrapper
 It brings the port to 1200Baud to reset the Arduino and bring it in upload mode. Which is required for Arduinos based on the ATmega32u4 like the Leonardo.
 
@@ -31,7 +30,6 @@ Locate the .arduinocdt folder. This is normaly hidden in your user folder
 
 
 # 2nd is arduino101loadWrapper:
-
 This is similar to the avrdudeWrapper it brings the port to 1200Baud to reset the Arduino101 and bring it in upload mode.
 
 Script is tested on:
