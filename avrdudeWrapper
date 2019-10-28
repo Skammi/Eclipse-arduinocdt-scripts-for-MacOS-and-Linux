@@ -1,0 +1,109 @@
+#!/bin/bash
+#
+# 	Name: avrdudeWrapper
+#
+#	Version	Date	Comment
+#	-------	----	-------
+#	0.0.3	191027	Used call name of script for path to avrdude.
+#					Made for MacOS and Linux
+#	0.0.2	191022	Cleaned up and added the debug option.
+#	0.0.1	191022	Initial version
+#
+#	Created on: 191021
+#	Author: Jacob
+#
+#	Purpose:
+#	Reset avr109 based arduino to upload mode by pushing the Serial port
+#	to 1200 Baud on linux machines
+#	Based on windows bat file by p1ne and Javanaut.
+#	https://github.com/p1ne/arduino-leonardo-uploader
+#	https://github.com/javanaut2018/avrdude_autoreset_wrapper
+#
+#	The required information is extracted out of the command line send by
+#	arduinocdt
+#
+#
+#	Usage:
+#	1:	Place this script in:
+#			/Users/[YOURUSERNAME]/.arduinocdt/packages/arduino/tools/avrdude/[VERSION]/bin
+#	2:	Edit:
+#			/Users/[YOURUSERNAME]/.arduinocdt/packages/arduino/hardware/avr/[VERSION]/platform.txt
+#		Replace:
+#			tools.avrdude.cmd.path={path}/bin/avrdude
+#		With:
+#			tools.avrdude.cmd.path={path}/bin/avrdude_wrapper.bat
+#	3:	(re)start eclipse.
+#
+#
+# Set DEBUG to non zero for additional output
+DEBUG=1
+
+ME=`basename "$0"`
+echo "$ME: starting script"
+
+# print all parameters when in debug mode
+if [ $DEBUG -ne 0 ]
+then
+	for arg in "$@"
+	do
+		echo $arg
+	done
+fi
+
+OS=`uname`
+
+# Make the program path that is: $0 - scriptname + arduino101load
+PROGPATH=${0%$ME}"avrdude"
+
+# Get the options for the excution of the avrdude command
+OPTIONS=$*
+
+# Look for the option -c and -P
+for arg in "$@"
+do
+	# get the first to characters of the argument
+	OPT="${arg:0:2}"
+	case $OPT in
+		"-c")
+			# get the programmer mode
+			PROG=${arg#-c}
+			;;
+		"-P")
+			# get the port
+			PORT=${arg#-P}
+			;;
+    	*)
+    esac
+done
+
+# Create the commandline
+COMMAND=$PROGPATH" "$OPTIONS
+
+# print all parameters when in debug mode
+if [ $DEBUG -ne 0 ]
+then
+	echo "OS = $OS"
+	echo "Programmer = $PROG"
+	echo "Program path = $PROGPATH"
+	echo "Port = $PORT"
+	echo "Options = $OPTIONS"
+	echo "Command = $COMMAND"
+fi
+
+# Create the delay for avr109 type of boards
+if [ $PROG = "avr109" ] 
+then
+	if [ $OS = "Darwin" ]
+	then
+		echo "$ME: Reset Arduino $OS"
+		stty -f "$PORT" 1200 cs8 -cstopb -parenb
+	else
+		echo "$ME: Reset Arduino $OS"
+		stty -F "$PORT" 1200 cs8 -cstopb -parenb
+	fi
+	echo "$ME: Wait to give the board time to reboot"
+	sleep 2
+fi
+
+$COMMAND
+# eof
