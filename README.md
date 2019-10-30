@@ -4,6 +4,7 @@ These scripts will allow to reset the upload port for specific Arduino boards fr
 	1. avrdudeWrapper
 	2. arduino101loadWrapper
 	3. cluploadEdison
+		createWifiNodes
 
 # 1st is avrdudeWrapper:
 This is derived from the windows batch file from: https://github.com/javanaut2018/avrdude_autoreset_wrapper
@@ -105,3 +106,8 @@ Locate the .arduinocdt folder. This is normaly hidden in your user folder
 		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path} \
 		  /clupload/cluploadEdison
 	5. (re)start Eclipse
+
+# createWifiNodes
+This script create the wifi node files in the /dev directory required by the cluploadEdison script.
+
+Usage > sudo createWifiNodes hostname1 [hostname2] [hostname3] ... [hostnameN]
