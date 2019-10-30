@@ -1,5 +1,5 @@
 # Arduincdt bash scripts for MacOS and Linux
-These scripts will allow to reset the upload port for specific Arduino boards from Eclipse CDT with the Arduino Plugin.
+These scripts will allow to reset the upload port for specific Arduino boards from Eclipse CDT with the Arduino Plugin. Or to upload to the Intel Edison using WIfi.
 
 	1. avrdudeWrapper
 	2. arduino101loadWrapper
