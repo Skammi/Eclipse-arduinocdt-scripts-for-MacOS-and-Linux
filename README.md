@@ -96,9 +96,12 @@ Locate the .arduinocdt folder. This is normaly hidden in your user folder
 		/[VERSION]/platform.txt
 		Replace for:
 		 MacOS
-		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path}/clupload/cluploadEdison_osx.sh
+		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path} \
+		  /clupload/cluploadEdison_osx.sh
 		 Linux
-		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path}/clupload/cluploadEdison_linux.sh
+		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path} \
+		  /clupload/cluploadEdison_linux.sh
 		With:
-		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path}/clupload/cluploadEdison
+		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path} \
+		  /clupload/cluploadEdison
 	5. (re)start Eclipse
