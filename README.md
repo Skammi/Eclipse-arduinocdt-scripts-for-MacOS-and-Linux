@@ -3,7 +3,7 @@ These scripts will allow to reset the upload port for specific Arduino boards fr
 
 	1. avrdudeWrapper
 	2. arduino101loadWrapper
-	3. cluploadEdison_osx.sh (replacement for original)
+	3. cluploadEdison
 
 # 1st is avrdudeWrapper:
 This is derived from the windows batch file from: https://github.com/javanaut2018/avrdude_autoreset_wrapper
