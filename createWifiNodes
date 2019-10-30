@@ -1,0 +1,69 @@
+#!/bin/sh
+#
+# 	Name: createWifiNodes
+#
+#	Version	Date	Comment
+#	-------	----	-------
+#	0.0.1	191030	Initial version fork from Intel cluploadEdison using sshfs
+#
+#	Created on: 191030
+#	Author: Jacob
+#
+#	Purpose:
+#	Create the /dev/cu.... nodes for the Intel Edison wifi nodes required by cluploadEdison.
+#
+#	Usage:
+#	$ sudo createWifiNodes hostname1 hostname2 ... hostnameN
+#
+#
+
+
+#
+#
+#========[ START SCRIPT ]========
+#
+# Set DEBUG to non zero for additional output
+DEBUG=1
+
+ME=`basename "$0"`
+echo "$ME: starting script"
+if [ $# -lt 1 ]
+then
+	echo "$ME: no arguments!!"
+	echo "$ME: usage: $ME hostname [ hostname ] [ hostname ] "
+	exit 1
+fi
+#
+# print  parameters when in debug mode
+if [ $DEBUG -ne 0 ] ; then echo "$ME: Args to shell: $*" ; fi
+
+OS=`uname`
+if [ $OS = "Darwin" ]
+then
+	FILEPRE="/dev/cu"
+else
+	FILEPRE="/dev/ttyACM0"
+fi
+
+for ARG in "$@"
+do
+	FILE="$FILEPRE.wifi.$ARG"
+	if [ $DEBUG -ne 0 ] ; then echo "$ME: Special file name: $FILE" ; fi
+
+	if [ -e $FILE ]
+	then
+		echo "$ME: $FILE exists!!"
+	else
+		COMMAND="sudo mknod $FILE c 3 2"
+		if [ $DEBUG -ne 0 ] ; then echo "$ME: Command: $COMMAND" ; fi
+
+		if `$COMMAND`
+		then
+			echo "$ME: mknod  /dev/cu.wifi.$ARG succeeded!"
+		else
+			echo "$ME: mknod  /dev/cu.wifi.$ARG FAILED!!!"
+			exit 1
+		fi
+	fi
+done
+exit 0
