@@ -57,13 +57,13 @@ Locate the .arduinocdt folder. This is normaly hidden in your user folder
 		 tools.arduino101load.cmd.path={runtime.tools.arduino101load.path}/arduino101loadWrapper
 	3: (re)start eclipse.
 
-# 3rd is cluploadEdison_osx.sh:
+# 3rd is cluploadEdison:
 This script adds the possibility to download the program to Intel Edison boards using Wifi.
 
 Script is tested on:
 
 	Macos: HighSierra and Mojava.
-	Linux: 
+	Linux: Ubuntu 18:04
 
 Installation instuctions.
 
@@ -77,17 +77,28 @@ Locate the .arduinocdt folder. This is normaly hidden in your user folder
 		Create the ssh keypair for the download user
 		Move the private key to the Mac.
 		Add the public key to the authorized_keys of the download user
-	2.	Prepare the Mac
-		Make a node file with the hostname of the Intel Edison wifi.
+	2.	Prepare the Mac Linux
+		Make a node file with the hostname of the edison wifi.
 		i.e. for hostname is foo
-		  sudo mknode /dev/cu.foo c 3 2
-	3.	Make a backup of the original file in:
-		  /Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/tools/sketchUploader \ 
-		  /[VERSION]/clupload/cluploadEdison_osx.sh
-		to:
+		 MacOS
+		  > sudo mknod /dev/cu.wifi.foo c 3 2
+		 Linux
+		  > sudo mknod /dev/ttyACM0.wifi.foo c 3 2
+		NOTE1:	This have to be repeated after a reboot.
+		NOTE2:	On MacOS this must start with cu.
+			On Linux this must start with ttyACM
+			Otherwise it will not be offered in the Serial Port drop down menu
+	3.	Place this script in:
 		  /Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/tools/sketchUploader \
-		  /[VERSION]/clupload/cluploadEdison_osx.sh.org
-	4.	Copy this file to:
-		  /Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/tools/sketchUploader \
-		  /[VERSION]/clupload/cluploadEdison_osx.sh
+		  /[VERSION]/clupload/
+	4.	Edit:
+		  /Users/[YOURUSERNAME]/.arduinocdt/packages/Intel/hardware/i686 \
+		  /[VERSION]/platform.txt
+		Replace for:
+		 MacOS
+		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path}/clupload/cluploadEdison_osx.sh
+		 Linux
+		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path}/clupload/cluploadEdison_linux.sh
+		With:
+		  tools.izmirdl.cmd.path={runtime.tools.sketchUploader-1.6.2+1.0.path}/clupload/cluploadEdison
 	5.	(re)start Eclipse
